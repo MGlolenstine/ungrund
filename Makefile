@@ -40,6 +40,9 @@ endif
 # Examples
 TRIANGLE_EXAMPLE = $(BUILD_DIR)/triangle
 TEXT_EXAMPLE = $(BUILD_DIR)/text_render
+PONG_EXAMPLE = $(BUILD_DIR)/pong
+INPUT_CALLBACKS_EXAMPLE = $(BUILD_DIR)/input_callbacks
+GEOMETRY_DEMO_EXAMPLE = $(BUILD_DIR)/geometry_demo
 
 # Default target
 .PHONY: all
@@ -61,7 +64,7 @@ $(OBJ_DIR)/%.o: $(ENGINE_SRC_DIR)/%.m | $(OBJ_DIR)
 
 # Examples target
 .PHONY: examples
-examples: triangle text
+examples: triangle text pong input_callbacks geometry_demo
 
 # Triangle example
 .PHONY: triangle
@@ -79,6 +82,30 @@ $(TEXT_EXAMPLE): examples/text_render/main.c $(ENGINE_LIB) | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $< -o $@ -L$(LIB_DIR) -lungrund $(LDFLAGS)
 	@echo "Built text rendering example: $@"
 
+# Pong game example
+.PHONY: pong
+pong: $(PONG_EXAMPLE)
+
+$(PONG_EXAMPLE): examples/pong/main.c $(ENGINE_LIB) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $< -o $@ -L$(LIB_DIR) -lungrund $(LDFLAGS)
+	@echo "Built pong game example: $@"
+
+# Input callbacks example
+.PHONY: input_callbacks
+input_callbacks: $(INPUT_CALLBACKS_EXAMPLE)
+
+$(INPUT_CALLBACKS_EXAMPLE): examples/input_callbacks/main.c $(ENGINE_LIB) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $< -o $@ -L$(LIB_DIR) -lungrund $(LDFLAGS)
+	@echo "Built input callbacks example: $@"
+
+# Geometry demo example
+.PHONY: geometry_demo
+geometry_demo: $(GEOMETRY_DEMO_EXAMPLE)
+
+$(GEOMETRY_DEMO_EXAMPLE): examples/geometry_demo/main.c $(ENGINE_LIB) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $< -o $@ -L$(LIB_DIR) -lungrund $(LDFLAGS)
+	@echo "Built geometry demo example: $@"
+
 # Run targets
 .PHONY: run-triangle
 run-triangle: $(TRIANGLE_EXAMPLE)
@@ -89,6 +116,21 @@ run-triangle: $(TRIANGLE_EXAMPLE)
 run-text: $(TEXT_EXAMPLE)
 	@echo "Running text rendering example..."
 	./$(TEXT_EXAMPLE)
+
+.PHONY: run-pong
+run-pong: $(PONG_EXAMPLE)
+	@echo "Running pong game..."
+	./$(PONG_EXAMPLE)
+
+.PHONY: run-input
+run-input: $(INPUT_CALLBACKS_EXAMPLE)
+	@echo "Running input callbacks example..."
+	./$(INPUT_CALLBACKS_EXAMPLE)
+
+.PHONY: run-geometry
+run-geometry: $(GEOMETRY_DEMO_EXAMPLE)
+	@echo "Running geometry demo..."
+	./$(GEOMETRY_DEMO_EXAMPLE)
 
 # Create directories
 $(BUILD_DIR):
@@ -112,13 +154,17 @@ help:
 	@echo "Ungrund Game Engine - Build System"
 	@echo ""
 	@echo "Targets:"
-	@echo "  all          - Build engine library and all examples (default)"
-	@echo "  engine       - Build only the engine library"
-	@echo "  examples     - Build all examples"
-	@echo "  triangle     - Build triangle rendering example"
-	@echo "  text         - Build text rendering example"
-	@echo "  run-triangle - Build and run triangle example"
-	@echo "  run-text     - Build and run text rendering example"
-	@echo "  clean        - Remove all build artifacts"
-	@echo "  help         - Show this help message"
+	@echo "  all             - Build engine library and all examples (default)"
+	@echo "  engine          - Build only the engine library"
+	@echo "  examples        - Build all examples"
+	@echo "  triangle        - Build triangle rendering example"
+	@echo "  text            - Build text rendering example"
+	@echo "  pong            - Build pong game example"
+	@echo "  input_callbacks - Build input callbacks example"
+	@echo "  run-triangle    - Build and run triangle example"
+	@echo "  run-text        - Build and run text rendering example"
+	@echo "  run-pong        - Build and run pong game"
+	@echo "  run-input       - Build and run input callbacks example"
+	@echo "  clean           - Remove all build artifacts"
+	@echo "  help            - Show this help message"
 

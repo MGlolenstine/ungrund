@@ -35,7 +35,7 @@ cd /tmp
 # Download the macOS release (e.g., wgpu-macos-x86_64-release.zip or wgpu-macos-aarch64-release.zip)
 
 # For Apple Silicon (M1/M2/M3):
-curl -L -o wgpu-native.zip https://github.com/gfx-rs/wgpu-native/releases/download/v0.19.3.1/wgpu-macos-aarch64-release.zip
+curl -L -o wgpu-native.zip https://github.com/gfx-rs/wgpu-native/releases/download/v27.0.4.0/wgpu-macos-aarch64-release.zip
 
 # For Intel Macs:
 # curl -L -o wgpu-native.zip https://github.com/gfx-rs/wgpu-native/releases/download/v0.19.3.1/wgpu-macos-x86_64-release.zip

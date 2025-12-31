@@ -1,0 +1,278 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/app_loop.o",
+      "engine/src/app_loop.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/app_loop.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/app_loop.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/context.o",
+      "engine/src/context.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/context.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/context.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/file_io.o",
+      "engine/src/file_io.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/file_io.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/file_io.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/geometry.o",
+      "engine/src/geometry.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/geometry.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/geometry.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/pipeline.o",
+      "engine/src/pipeline.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/pipeline.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/pipeline.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/render_frame.o",
+      "engine/src/render_frame.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/render_frame.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/render_frame.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/render_pass.o",
+      "engine/src/render_pass.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/render_pass.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/render_pass.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/renderer.o",
+      "engine/src/renderer.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/renderer.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/renderer.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/shader.o",
+      "engine/src/shader.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/shader.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/shader.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/uniform.o",
+      "engine/src/uniform.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/uniform.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/uniform.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/vertex_buffer.o",
+      "engine/src/vertex_buffer.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/vertex_buffer.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/vertex_buffer.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/window.o",
+      "engine/src/window.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/window.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/window.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "-o",
+      "build/obj/surface_macos.o",
+      "engine/src/surface_macos.m"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/engine/src/surface_macos.m",
+    "output": "/Users/notyours/cProjects/ungrund/build/obj/surface_macos.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-std=c11",
+      "-Iengine/include",
+      "-Ithird_party",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "QuartzCore",
+      "-framework",
+      "Metal",
+      "-framework",
+      "CoreGraphics",
+      "-framework",
+      "Foundation",
+      "-o",
+      "build/pong",
+      "examples/pong/main.c"
+    ],
+    "directory": "/Users/notyours/cProjects/ungrund",
+    "file": "/Users/notyours/cProjects/ungrund/examples/pong/main.c",
+    "output": "/Users/notyours/cProjects/ungrund/build/pong"
+  }
+]
