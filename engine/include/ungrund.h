@@ -59,9 +59,10 @@ WGPUCommandEncoder ug_render_frame_get_encoder(UGRenderFrame* frame);
 void ug_end_render_frame(UGRenderFrame* frame);
 
 // Application loop - callback-based render loop that handles everything
-// The render_callback is called each frame with the context and userdata
+// The render_callback is called each frame with the context, delta_time, and userdata
+// delta_time is the time elapsed since the last frame in seconds
 // Returns when the window is closed
-typedef void (*UGRenderCallback)(UGContext* context, UGRenderFrame* frame, void* userdata);
+typedef void (*UGRenderCallback)(UGContext* context, UGRenderFrame* frame, float delta_time, void* userdata);
 void ug_run(UGContext* context, UGRenderCallback render_callback, void* userdata);
 
 // Shader utilities
@@ -218,6 +219,58 @@ void ug_add_circle_2d_textured(UGVertex2DTextured* vertices, size_t* count,
                                float x, float y, float width, float height,
                                float u0, float v0, float u1, float v1,
                                int segments);
+
+// Font Atlas - simplified text rendering system
+// Handles font loading, atlas generation, and provides pre-configured pipeline/bind group
+typedef struct UGFontAtlas UGFontAtlas;
+
+// Create a font atlas from a TrueType font file
+// font_path: Path to .ttf or .otf font file
+// font_size: Font size in pixels
+// atlas_width, atlas_height: Size of the texture atlas (e.g., 512x512)
+// Returns NULL on failure
+UGFontAtlas* ug_font_atlas_create(UGContext* context, const char* font_path,
+                                   int font_size, int atlas_width, int atlas_height);
+
+// Destroy font atlas and free all resources
+void ug_font_atlas_destroy(UGFontAtlas* atlas);
+
+// Get the pre-configured render pipeline for text rendering
+WGPURenderPipeline ug_font_atlas_get_pipeline(UGFontAtlas* atlas);
+
+// Get the pre-configured bind group (contains texture and sampler)
+WGPUBindGroup ug_font_atlas_get_bind_group(UGFontAtlas* atlas);
+
+// Add text to a vertex buffer using pixel coordinates (recommended)
+// vertices: Pointer to vertex array (must be large enough)
+// count: Pointer to current vertex count (will be incremented)
+// text: UTF-8 text string to render
+// x, y: Position in pixel coordinates (origin at top-left, y-down)
+// context: Context to get window dimensions for coordinate conversion
+// r, g, b, a: Text color (0.0 to 1.0)
+// Note: Each character adds 6 vertices (2 triangles)
+void ug_font_atlas_add_text_px(UGFontAtlas* atlas, void* vertices, size_t* count,
+                               const char* text, float x, float y, UGContext* context,
+                               float r, float g, float b, float a);
+
+// Add text to a vertex buffer using NDC coordinates (advanced)
+// vertices: Pointer to vertex array (must be large enough)
+// count: Pointer to current vertex count (will be incremented)
+// text: UTF-8 text string to render
+// x, y: Position in NDC space (-1 to 1)
+// pixel_height: Height of one pixel in NDC space (typically 2.0 / screen_height)
+// r, g, b, a: Text color (0.0 to 1.0)
+// Note: Each character adds 6 vertices (2 triangles)
+void ug_font_atlas_add_text(UGFontAtlas* atlas, void* vertices, size_t* count,
+                            const char* text, float x, float y, float pixel_height,
+                            float r, float g, float b, float a);
+
+// Get the vertex size for text rendering (for creating vertex buffers)
+size_t ug_font_atlas_get_vertex_size(void);
+
+// Get vertex attributes for text rendering (for setting up vertex buffer layout)
+// attributes: Array of 3 UGVertexAttribute structures to fill
+void ug_font_atlas_get_vertex_attributes(UGVertexAttribute* attributes);
 
 // Platform-specific helpers
 #if defined(__APPLE__)

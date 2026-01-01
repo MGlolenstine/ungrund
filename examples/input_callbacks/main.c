@@ -49,8 +49,9 @@ void on_mouse_button(UGMouseButton button, bool pressed, void* userdata) {
 }
 
 // Simple render callback
-void render(UGContext* context, UGRenderFrame* frame, void* userdata) {
+void render(UGContext* context, UGRenderFrame* frame, float delta_time, void* userdata) {
     (void)context;
+    (void)delta_time;
     (void)userdata;
     
     // Simple clear to a nice blue color

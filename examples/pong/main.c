@@ -38,9 +38,6 @@ typedef struct {
     WGPURenderPipeline pipeline;
     size_t vertex_count;
 
-    // Timing
-    double last_time;
-
     // Input state (for callback-based input)
     bool key_w_pressed;
     bool key_s_pressed;
@@ -58,7 +55,6 @@ void init_game(GameState* game) {
     game->ball_vy = BALL_SPEED * 0.5f;
     game->left_score = 0;
     game->right_score = 0;
-    game->last_time = ug_get_time();
 
     // Initialize input state
     game->key_w_pressed = false;
@@ -252,17 +248,12 @@ void update_game(GameState* game, float dt) {
 }
 
 // Render callback
-void render(UGContext* context, UGRenderFrame* frame, void* userdata) {
+void render(UGContext* context, UGRenderFrame* frame, float delta_time, void* userdata) {
     GameState* game = (GameState*)userdata;
     (void)context;
 
-    // Calculate delta time
-    double current_time = ug_get_time();
-    float dt = (float)(current_time - game->last_time);
-    game->last_time = current_time;
-
     // Update game logic
-    update_game(game, dt);
+    update_game(game, delta_time);
 
     // Build vertex data
     Vertex vertices[MAX_VERTICES];

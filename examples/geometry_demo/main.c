@@ -13,9 +13,10 @@ typedef struct {
 } RenderData;
 
 // Render callback
-void render(UGContext* context, UGRenderFrame* frame, void* userdata) {
+void render(UGContext* context, UGRenderFrame* frame, float delta_time, void* userdata) {
     RenderData* data = (RenderData*)userdata;
     (void)context;
+    (void)delta_time;  // Not used in this example
 
     // Build vertex data using the new geometry helpers
     UGVertex2DColor vertices[MAX_VERTICES];

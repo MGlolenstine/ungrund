@@ -43,6 +43,7 @@ TEXT_EXAMPLE = $(BUILD_DIR)/text_render
 PONG_EXAMPLE = $(BUILD_DIR)/pong
 INPUT_CALLBACKS_EXAMPLE = $(BUILD_DIR)/input_callbacks
 GEOMETRY_DEMO_EXAMPLE = $(BUILD_DIR)/geometry_demo
+FONT_ATLAS_DEMO_EXAMPLE = $(BUILD_DIR)/font_atlas_demo
 
 # Default target
 .PHONY: all
@@ -64,7 +65,7 @@ $(OBJ_DIR)/%.o: $(ENGINE_SRC_DIR)/%.m | $(OBJ_DIR)
 
 # Examples target
 .PHONY: examples
-examples: triangle text pong input_callbacks geometry_demo
+examples: triangle text pong input_callbacks geometry_demo font_atlas_demo
 
 # Triangle example
 .PHONY: triangle
@@ -106,6 +107,14 @@ $(GEOMETRY_DEMO_EXAMPLE): examples/geometry_demo/main.c $(ENGINE_LIB) | $(BUILD_
 	$(CC) $(CFLAGS) $< -o $@ -L$(LIB_DIR) -lungrund $(LDFLAGS)
 	@echo "Built geometry demo example: $@"
 
+# Font atlas demo example
+.PHONY: font_atlas_demo
+font_atlas_demo: $(FONT_ATLAS_DEMO_EXAMPLE)
+
+$(FONT_ATLAS_DEMO_EXAMPLE): examples/font_atlas_demo/main.c $(ENGINE_LIB) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $< -o $@ -L$(LIB_DIR) -lungrund $(LDFLAGS)
+	@echo "Built font atlas demo example: $@"
+
 # Run targets
 .PHONY: run-triangle
 run-triangle: $(TRIANGLE_EXAMPLE)
@@ -131,6 +140,11 @@ run-input: $(INPUT_CALLBACKS_EXAMPLE)
 run-geometry: $(GEOMETRY_DEMO_EXAMPLE)
 	@echo "Running geometry demo..."
 	./$(GEOMETRY_DEMO_EXAMPLE)
+
+.PHONY: run-font-atlas
+run-font-atlas: $(FONT_ATLAS_DEMO_EXAMPLE)
+	@echo "Running font atlas demo..."
+	./$(FONT_ATLAS_DEMO_EXAMPLE)
 
 # Create directories
 $(BUILD_DIR):

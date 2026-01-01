@@ -15,13 +15,15 @@ ungrund/
 ├── examples/            # Example programs
 │   ├── triangle/        # Triangle rendering example
 │   │   └── main.c
-│   ├── text_render/     # Text rendering example
+│   ├── text_render/     # Text rendering example (advanced)
 │   │   └── main.c
 │   ├── pong/            # Pong game example
 │   │   └── main.c
 │   ├── input_callbacks/ # Input handling example
 │   │   └── main.c
-│   └── geometry_demo/   # Geometry helper functions demo
+│   ├── geometry_demo/   # Geometry helper functions demo
+│   │   └── main.c
+│   └── font_atlas_demo/ # Font atlas (simplified text rendering)
 │       └── main.c
 ├── shaders/             # WGSL shader files
 │   ├── triangle.wgsl
@@ -134,6 +136,15 @@ Demonstrates the new geometry helper functions for generating shapes.
 make run-geometry
 ```
 
+### Font Atlas Demo Example
+Demonstrates simplified text rendering using the Font Atlas system.
+
+```bash
+make run-font-atlas
+```
+
+**Note:** For advanced text rendering with full control, see the `text_render` example. For simple text rendering with minimal boilerplate, use the Font Atlas system (see `FONT_ATLAS.md` for details).
+
 ## Engine API
 
 The engine provides a minimal API for window management and rendering:
@@ -177,6 +188,16 @@ void ug_add_circle_2d_textured(UGVertex2DTextured* vertices, size_t* count,
                                float x, float y, float width, float height,
                                float u0, float v0, float u1, float v1,
                                int segments);
+
+// Font Atlas - simplified text rendering
+UGFontAtlas* ug_font_atlas_create(UGContext* context, const char* font_path,
+                                   int font_size, int atlas_width, int atlas_height);
+void ug_font_atlas_destroy(UGFontAtlas* atlas);
+WGPURenderPipeline ug_font_atlas_get_pipeline(UGFontAtlas* atlas);
+WGPUBindGroup ug_font_atlas_get_bind_group(UGFontAtlas* atlas);
+void ug_font_atlas_add_text(UGFontAtlas* atlas, void* vertices, size_t* count,
+                            const char* text, float x, float y,
+                            float r, float g, float b, float a);
 ```
 
 ### Geometry Helper Functions
@@ -211,6 +232,37 @@ ug_vertex_buffer_update(vertex_buffer, vertices, count);
 ```
 
 See `examples/geometry_demo/` for a complete example.
+
+### Font Atlas System
+
+The Font Atlas provides simplified text rendering without requiring custom shaders or manual font management:
+
+**Key Features:**
+- ✅ No shader file needed - embedded default shader
+- ✅ Automatic font loading and atlas generation
+- ✅ Pre-configured pipeline and bind group
+- ✅ Simple `ug_font_atlas_add_text()` API
+- ✅ Reduces ~165 lines of boilerplate compared to manual approach
+
+**Example Usage:**
+```c
+// Create font atlas
+UGFontAtlas* font = ug_font_atlas_create(context, "font.ttf", 32, 512, 512);
+
+// Add text to vertex buffer
+void* vertices = malloc(vertex_size * MAX_VERTICES);
+size_t count = 0;
+float pixel_height = 2.0f / screen_height;
+ug_font_atlas_add_text(font, vertices, &count, "Hello World!",
+                      x, y, pixel_height, 1.0f, 1.0f, 1.0f, 1.0f);
+
+// Render
+ug_render_pass_set_pipeline(pass, ug_font_atlas_get_pipeline(font));
+ug_render_pass_set_bind_group(pass, 0, ug_font_atlas_get_bind_group(font));
+ug_render_pass_draw(pass, count);
+```
+
+See `FONT_ATLAS.md` for complete documentation and `examples/font_atlas_demo/` for a working example.
 
 ## Examples Overview
 
