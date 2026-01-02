@@ -65,6 +65,8 @@ ls -l /usr/local/include/webgpu/webgpu.h
 
 ## Linux Setup (Ubuntu/Debian)
 
+The Ungrund engine supports both **X11** and **Wayland** display servers on Linux. The engine automatically detects which display server you're using at runtime.
+
 ### 1. Install Build Tools
 
 ```bash
@@ -102,11 +104,19 @@ sudo ldconfig
 rm -rf wgpu-native.zip libwgpu_native.so webgpu.h
 ```
 
-### 4. Install X11 Development Libraries
+### 4. Install Display Server Development Libraries
 
+For **X11** support:
 ```bash
 sudo apt-get install libx11-dev
 ```
+
+For **Wayland** support:
+```bash
+sudo apt-get install libwayland-dev
+```
+
+**Note:** You can install both to support running on either X11 or Wayland. The engine will automatically detect and use the appropriate display server at runtime based on your environment.
 
 ## Building the Project
 
@@ -153,6 +163,30 @@ make run-text
 ### Examples don't run
 - Make sure you have a GPU that supports Vulkan (Linux) or Metal (macOS)
 - Check that your graphics drivers are up to date
+
+### Linux: "Failed to get Wayland display or surface from GLFW"
+- This error occurs when running on Wayland but GLFW wasn't compiled with Wayland support
+- Install GLFW from source with Wayland support, or use the X11 backend by setting:
+  ```bash
+  export WAYLAND_DISPLAY=""
+  ```
+- Alternatively, ensure your GLFW package includes Wayland support (most modern distributions do)
+
+### Linux: "Failed to get X11 display from GLFW"
+- This error occurs when running on X11 but GLFW wasn't compiled with X11 support
+- Make sure `libx11-dev` is installed and reinstall GLFW
+- Check that the `DISPLAY` environment variable is set:
+  ```bash
+  echo $DISPLAY
+  ```
+
+### Linux: How to check which display server I'm using?
+```bash
+echo $XDG_SESSION_TYPE
+# Output will be either "x11" or "wayland"
+```
+
+The engine will automatically detect and use the correct display server. You can also check the console output when running examples - it will print "Created X11 surface" or "Created Wayland surface".
 
 ## Next Steps
 

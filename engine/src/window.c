@@ -7,7 +7,9 @@
 #elif defined(_WIN32)
 #define GLFW_EXPOSE_NATIVE_WIN32
 #else
+// On Linux, expose both X11 and Wayland
 #define GLFW_EXPOSE_NATIVE_X11
+#define GLFW_EXPOSE_NATIVE_WAYLAND
 #endif
 
 #include <GLFW/glfw3native.h>
@@ -202,5 +204,19 @@ void ug_window_set_mouse_button_callback(UGWindow* window, UGMouseButtonCallback
     } else {
         glfwSetMouseButtonCallback(window->handle, NULL);
     }
+}
+
+// Get X11 display (Linux only)
+void* ug_window_get_x11_display(void) {
+#if defined(__linux__)
+    return glfwGetX11Display();
+#else
+    return NULL;
+#endif
+}
+
+// Get GLFW window handle (for internal use)
+void* ug_window_get_glfw_handle(UGWindow* window) {
+    return window ? window->handle : NULL;
 }
 

@@ -31,6 +31,7 @@ bool ug_window_should_close(UGWindow* window);
 void ug_window_poll_events(UGWindow* window);
 void* ug_window_get_native_handle(UGWindow* window);
 void* ug_window_get_x11_display(void); // Get X11 display (Linux only)
+void* ug_window_get_glfw_handle(UGWindow* window); // Get GLFW handle (internal use)
 void ug_window_get_size(UGWindow* window, int* width, int* height);
 
 // WebGPU Context management
@@ -349,6 +350,12 @@ void ug_font_atlas_get_vertex_attributes(UGVertexAttribute* attributes);
 // Platform-specific helpers
 #if defined(__APPLE__)
 void* ug_create_metal_layer(void* ns_window_ptr);
+#endif
+
+#if defined(__linux__)
+WGPUSurface ug_create_linux_surface(WGPUInstance instance, void* window_handle);
+void* ug_get_x11_display(void);
+void* ug_get_wayland_display(void);
 #endif
 
 #ifdef __cplusplus

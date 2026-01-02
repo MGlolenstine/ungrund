@@ -15,7 +15,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 ifeq ($(UNAME_S),Linux)
-    LDFLAGS += -lX11 -lm
+    LDFLAGS += -lX11 -lwayland-client -lm
 endif
 
 # Directories

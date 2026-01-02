@@ -65,9 +65,11 @@ brew install glfw
 
 ### Linux
 
+**Supports both X11 and Wayland** - the engine automatically detects your display server.
+
 ```bash
 # Install dependencies
-sudo apt-get install libglfw3-dev
+sudo apt-get install libglfw3-dev libx11-dev libwayland-dev
 
 # Install wgpu-native
 # Download from: https://github.com/gfx-rs/wgpu-native/releases

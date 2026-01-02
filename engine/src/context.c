@@ -8,6 +8,13 @@
 #include <windows.h>
 #endif
 
+#if defined(__linux__)
+#include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_X11
+#define GLFW_EXPOSE_NATIVE_WAYLAND
+#include <GLFW/glfw3native.h>
+#endif
+
 // Internal structures
 typedef struct {
     WGPUAdapter adapter;
@@ -108,25 +115,10 @@ static WGPUSurface create_surface(WGPUInstance instance, UGWindow* window) {
 
     surface = wgpuInstanceCreateSurface(instance, &surface_desc);
 #else
-    // Linux X11 surface creation
-    void* x11_window = ug_window_get_native_handle(window);
-    void* x11_display = ug_window_get_x11_display();
-
-    WGPUSurfaceSourceXlibWindow x11_surface_source = {
-        .chain = {
-            .next = NULL,
-            .sType = WGPUSType_SurfaceSourceXlibWindow,
-        },
-        .display = x11_display,
-        .window = (uint32_t)(uintptr_t)x11_window,
-    };
-
-    WGPUSurfaceDescriptor surface_desc = {
-        .nextInChain = (const WGPUChainedStruct*)&x11_surface_source,
-        .label = {"Main Surface", WGPU_STRLEN},
-    };
-
-    surface = wgpuInstanceCreateSurface(instance, &surface_desc);
+    // Linux surface creation (supports both X11 and Wayland)
+    // Get the GLFW window handle from UGWindow
+    GLFWwindow* glfw_handle = (GLFWwindow*)ug_window_get_glfw_handle(window);
+    surface = ug_create_linux_surface(instance, glfw_handle);
 #endif
 
     return surface;
