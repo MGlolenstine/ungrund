@@ -135,6 +135,14 @@ void* ug_window_get_native_handle(UGWindow* window) {
 #endif
 }
 
+void* ug_window_get_x11_display(void) {
+#if !defined(__APPLE__) && !defined(_WIN32)
+    return glfwGetX11Display();
+#else
+    return NULL;
+#endif
+}
+
 void ug_window_get_size(UGWindow* window, int* width, int* height) {
     glfwGetFramebufferSize(window->handle, width, height);
 }
