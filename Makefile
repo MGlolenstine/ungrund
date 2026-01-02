@@ -44,6 +44,7 @@ PONG_EXAMPLE = $(BUILD_DIR)/pong
 INPUT_CALLBACKS_EXAMPLE = $(BUILD_DIR)/input_callbacks
 GEOMETRY_DEMO_EXAMPLE = $(BUILD_DIR)/geometry_demo
 FONT_ATLAS_DEMO_EXAMPLE = $(BUILD_DIR)/font_atlas_demo
+SPRITE_DEMO_EXAMPLE = $(BUILD_DIR)/sprite_demo
 
 # Default target
 .PHONY: all
@@ -65,7 +66,7 @@ $(OBJ_DIR)/%.o: $(ENGINE_SRC_DIR)/%.m | $(OBJ_DIR)
 
 # Examples target
 .PHONY: examples
-examples: triangle text pong input_callbacks geometry_demo font_atlas_demo
+examples: triangle text pong input_callbacks geometry_demo font_atlas_demo sprite_demo
 
 # Triangle example
 .PHONY: triangle
@@ -115,6 +116,14 @@ $(FONT_ATLAS_DEMO_EXAMPLE): examples/font_atlas_demo/main.c $(ENGINE_LIB) | $(BU
 	$(CC) $(CFLAGS) $< -o $@ -L$(LIB_DIR) -lungrund $(LDFLAGS)
 	@echo "Built font atlas demo example: $@"
 
+# Sprite demo example
+.PHONY: sprite_demo
+sprite_demo: $(SPRITE_DEMO_EXAMPLE)
+
+$(SPRITE_DEMO_EXAMPLE): examples/sprite_demo/main.c $(ENGINE_LIB) | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $< -o $@ -L$(LIB_DIR) -lungrund $(LDFLAGS)
+	@echo "Built sprite demo example: $@"
+
 # Run targets
 .PHONY: run-triangle
 run-triangle: $(TRIANGLE_EXAMPLE)
@@ -146,6 +155,11 @@ run-font-atlas: $(FONT_ATLAS_DEMO_EXAMPLE)
 	@echo "Running font atlas demo..."
 	./$(FONT_ATLAS_DEMO_EXAMPLE)
 
+.PHONY: run-sprite
+run-sprite: $(SPRITE_DEMO_EXAMPLE)
+	@echo "Running sprite demo..."
+	./$(SPRITE_DEMO_EXAMPLE)
+
 # Create directories
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
@@ -175,10 +189,16 @@ help:
 	@echo "  text            - Build text rendering example"
 	@echo "  pong            - Build pong game example"
 	@echo "  input_callbacks - Build input callbacks example"
+	@echo "  geometry_demo   - Build geometry demo example"
+	@echo "  font_atlas_demo - Build font atlas demo example"
+	@echo "  sprite_demo     - Build sprite animation demo example"
 	@echo "  run-triangle    - Build and run triangle example"
 	@echo "  run-text        - Build and run text rendering example"
 	@echo "  run-pong        - Build and run pong game"
 	@echo "  run-input       - Build and run input callbacks example"
+	@echo "  run-geometry    - Build and run geometry demo"
+	@echo "  run-font-atlas  - Build and run font atlas demo"
+	@echo "  run-sprite      - Build and run sprite animation demo"
 	@echo "  clean           - Remove all build artifacts"
 	@echo "  help            - Show this help message"
 

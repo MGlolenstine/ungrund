@@ -92,14 +92,8 @@ int main(void) {
     }
 
     // Create vertex buffer using the standard UGVertex2DColor format
-    UGVertexBuffer* vertex_buffer = ug_vertex_buffer_create(context, sizeof(UGVertex2DColor), MAX_VERTICES);
-
-    // Define vertex layout for UGVertex2DColor
-    UGVertexAttribute vertex_attributes[2] = {
-        {.format = WGPUVertexFormat_Float32x2, .offset = 0, .shader_location = 0},
-        {.format = WGPUVertexFormat_Float32x3, .offset = 2 * sizeof(float), .shader_location = 1},
-    };
-    ug_vertex_buffer_set_layout(vertex_buffer, vertex_attributes, 2);
+    // New convenience function automatically sets up the correct layout!
+    UGVertexBuffer* vertex_buffer = ug_vertex_buffer_create_2d_color(context, MAX_VERTICES);
 
     // Build pipeline
     UGPipelineBuilder* pipeline_builder = ug_pipeline_builder_create(context, "examples/geometry_demo/shader.wgsl");

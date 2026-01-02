@@ -105,3 +105,70 @@ void ug_vertex_buffer_destroy(UGVertexBuffer* vb) {
     }
 }
 
+// Convenience function for UGVertex2DColor format
+UGVertexBuffer* ug_vertex_buffer_create_2d_color(UGContext* context, size_t max_vertices) {
+    if (!context || max_vertices == 0) {
+        return NULL;
+    }
+
+    // UGVertex2DColor: position (vec2) + color (vec3)
+    size_t vertex_size = sizeof(float) * 5;  // 2 + 3
+
+    UGVertexBuffer* vb = ug_vertex_buffer_create(context, vertex_size, max_vertices);
+    if (!vb) {
+        return NULL;
+    }
+
+    // Set up standard layout for UGVertex2DColor
+    UGVertexAttribute attributes[2] = {
+        {
+            .format = WGPUVertexFormat_Float32x2,
+            .offset = 0,
+            .shader_location = 0,
+        },
+        {
+            .format = WGPUVertexFormat_Float32x3,
+            .offset = 2 * sizeof(float),
+            .shader_location = 1,
+        },
+    };
+
+    ug_vertex_buffer_set_layout(vb, attributes, 2);
+
+    return vb;
+}
+
+// Convenience function for UGVertex2DTextured format
+UGVertexBuffer* ug_vertex_buffer_create_2d_textured(UGContext* context, size_t max_vertices) {
+    if (!context || max_vertices == 0) {
+        return NULL;
+    }
+
+    // UGVertex2DTextured: position (vec2) + uv (vec2)
+    size_t vertex_size = sizeof(float) * 4;  // 2 + 2
+
+    UGVertexBuffer* vb = ug_vertex_buffer_create(context, vertex_size, max_vertices);
+    if (!vb) {
+        return NULL;
+    }
+
+    // Set up standard layout for UGVertex2DTextured
+    UGVertexAttribute attributes[2] = {
+        {
+            .format = WGPUVertexFormat_Float32x2,
+            .offset = 0,
+            .shader_location = 0,
+        },
+        {
+            .format = WGPUVertexFormat_Float32x2,
+            .offset = 2 * sizeof(float),
+            .shader_location = 1,
+        },
+    };
+
+    ug_vertex_buffer_set_layout(vb, attributes, 2);
+
+    return vb;
+}
+
+

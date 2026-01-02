@@ -16,10 +16,13 @@ typedef struct UGContext UGContext;
 typedef struct UGContextBuilder UGContextBuilder;
 typedef struct UGRenderFrame UGRenderFrame;
 typedef struct UGPipelineBuilder UGPipelineBuilder;
+typedef struct UGPipeline UGPipeline;
 typedef struct UGUniformBuffer UGUniformBuffer;
 typedef struct UGBindGroupBuilder UGBindGroupBuilder;
 typedef struct UGVertexBuffer UGVertexBuffer;
 typedef struct UGRenderPass UGRenderPass;
+typedef struct UGTexture UGTexture;
+typedef struct UGSpriteSheet UGSpriteSheet;
 
 // Window management
 UGWindow* ug_window_create(const char* title, int width, int height);
@@ -129,8 +132,25 @@ void ug_pipeline_builder_set_layout(UGPipelineBuilder* builder, WGPUPipelineLayo
 void ug_pipeline_builder_set_vertex_buffer(UGPipelineBuilder* builder, WGPUVertexBufferLayout* layout);
 void ug_pipeline_builder_enable_blending(UGPipelineBuilder* builder, bool enable);
 void ug_pipeline_builder_set_topology(UGPipelineBuilder* builder, WGPUPrimitiveTopology topology);
+// New: Add uniforms and textures directly to pipeline builder (auto-creates layouts)
+void ug_pipeline_builder_add_uniform(UGPipelineBuilder* builder, uint32_t binding,
+                                      UGUniformBuffer* uniform, WGPUShaderStage visibility);
+void ug_pipeline_builder_add_texture(UGPipelineBuilder* builder, uint32_t binding,
+                                      WGPUTextureView texture_view, WGPUSampler sampler);
+WGPUBindGroup ug_pipeline_builder_build_bind_group(UGPipelineBuilder* builder, WGPUBindGroupLayout layout);
 WGPURenderPipeline ug_pipeline_builder_build(UGPipelineBuilder* builder);
 void ug_pipeline_builder_destroy(UGPipelineBuilder* builder);
+
+// Pipeline wrapper - owns all pipeline-related resources for automatic cleanup
+// This is a higher-level API that manages pipeline, layouts, bind groups, and uniforms
+UGPipeline* ug_pipeline_create(UGContext* context);
+void ug_pipeline_set_render_pipeline(UGPipeline* pipeline, WGPURenderPipeline render_pipeline);
+void ug_pipeline_set_pipeline_layout(UGPipeline* pipeline, WGPUPipelineLayout layout);
+void ug_pipeline_add_bind_group(UGPipeline* pipeline, WGPUBindGroup bind_group, WGPUBindGroupLayout layout);
+void ug_pipeline_add_uniform(UGPipeline* pipeline, UGUniformBuffer* uniform);
+WGPURenderPipeline ug_pipeline_get_handle(UGPipeline* pipeline);
+WGPUBindGroup ug_pipeline_get_bind_group(UGPipeline* pipeline, size_t index);
+void ug_pipeline_destroy(UGPipeline* pipeline);
 
 // Uniform buffer helpers
 UGUniformBuffer* ug_uniform_buffer_create(UGContext* context, size_t size);
@@ -162,6 +182,10 @@ void ug_vertex_buffer_update(UGVertexBuffer* vb, const void* data, size_t vertex
 WGPUBuffer ug_vertex_buffer_get_handle(UGVertexBuffer* vb);
 WGPUVertexBufferLayout* ug_vertex_buffer_get_layout(UGVertexBuffer* vb);
 void ug_vertex_buffer_destroy(UGVertexBuffer* vb);
+
+// Convenience functions for standard vertex formats (auto-sets layout)
+UGVertexBuffer* ug_vertex_buffer_create_2d_color(UGContext* context, size_t max_vertices);
+UGVertexBuffer* ug_vertex_buffer_create_2d_textured(UGContext* context, size_t max_vertices);
 
 // Render pass - simplified render pass management
 UGRenderPass* ug_render_pass_begin(UGRenderFrame* frame, float r, float g, float b, float a);
@@ -219,6 +243,55 @@ void ug_add_circle_2d_textured(UGVertex2DTextured* vertices, size_t* count,
                                float x, float y, float width, float height,
                                float u0, float v0, float u1, float v1,
                                int segments);
+
+// Texture loading - simplified image loading and texture creation
+// Load a texture from an image file (supports PNG, JPG, BMP, TGA, etc.)
+// filepath: Path to the image file
+// Returns NULL on failure
+UGTexture* ug_texture_create_from_file(UGContext* context, const char* filepath);
+
+// Destroy texture and free all resources
+void ug_texture_destroy(UGTexture* texture);
+
+// Get the texture view for binding to shaders
+WGPUTextureView ug_texture_get_view(UGTexture* texture);
+
+// Get the sampler for texture sampling
+WGPUSampler ug_texture_get_sampler(UGTexture* texture);
+
+// Get texture dimensions
+void ug_texture_get_size(UGTexture* texture, int* width, int* height);
+
+// Sprite Sheet - sprite animation system for 2D games
+// Create a sprite sheet from a texture
+// texture: The texture containing the sprite sheet
+// sprite_width: Width of each sprite in pixels
+// sprite_height: Height of each sprite in pixels
+// The sprite sheet is organized in a grid from left-to-right, top-to-bottom
+// Sprite index 0 is top-left, incrementing across rows
+UGSpriteSheet* ug_sprite_sheet_create(UGTexture* texture, int sprite_width, int sprite_height);
+
+// Destroy sprite sheet (does not destroy the texture)
+void ug_sprite_sheet_destroy(UGSpriteSheet* sheet);
+
+// Add a sprite to a vertex array
+// sheet: The sprite sheet
+// vertices: Pointer to vertex array (UGVertex2DTextured format)
+// count: Pointer to current vertex count (will be incremented by 6)
+// sprite_index: Index of the sprite to render (0-based, left-to-right, top-to-bottom)
+// x, y: Center position in NDC or world space
+// w, h: Half-width and half-height
+void ug_sprite_sheet_add_sprite(UGSpriteSheet* sheet, UGVertex2DTextured* vertices, size_t* count,
+                                int sprite_index, float x, float y, float w, float h);
+
+// Get the texture associated with this sprite sheet
+UGTexture* ug_sprite_sheet_get_texture(UGSpriteSheet* sheet);
+
+// Get the size of individual sprites in the sheet
+void ug_sprite_sheet_get_sprite_size(UGSpriteSheet* sheet, int* width, int* height);
+
+// Get the total number of sprites in the sheet
+int ug_sprite_sheet_get_sprite_count(UGSpriteSheet* sheet);
 
 // Font Atlas - simplified text rendering system
 // Handles font loading, atlas generation, and provides pre-configured pipeline/bind group
