@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(_WIN32)
+#include <windows.h>
+#endif
+
 // Internal structures
 typedef struct {
     WGPUAdapter adapter;
@@ -64,7 +68,7 @@ static void on_device_request_ended(WGPURequestDeviceStatus status, WGPUDevice d
 // Create surface for the window
 static WGPUSurface create_surface(WGPUInstance instance, UGWindow* window) {
     WGPUSurface surface = NULL;
-    
+
 #if defined(__APPLE__)
     void* ns_window = ug_window_get_native_handle(window);
     void* metal_layer = ug_create_metal_layer(ns_window);
@@ -84,9 +88,45 @@ static WGPUSurface create_surface(WGPUInstance instance, UGWindow* window) {
 
     surface = wgpuInstanceCreateSurface(instance, &surface_desc);
 #elif defined(_WIN32)
-    // TODO: Windows surface creation
+    // Windows surface creation
+    void* hwnd = ug_window_get_native_handle(window);
+    void* hinstance = GetModuleHandle(NULL);
+
+    WGPUSurfaceSourceWindowsHWND windows_surface_source = {
+        .chain = {
+            .next = NULL,
+            .sType = WGPUSType_SurfaceSourceWindowsHWND,
+        },
+        .hinstance = hinstance,
+        .hwnd = hwnd,
+    };
+
+    WGPUSurfaceDescriptor surface_desc = {
+        .nextInChain = (const WGPUChainedStruct*)&windows_surface_source,
+        .label = {"Main Surface", WGPU_STRLEN},
+    };
+
+    surface = wgpuInstanceCreateSurface(instance, &surface_desc);
 #else
-    // TODO: Linux surface creation
+    // Linux X11 surface creation
+    void* x11_window = ug_window_get_native_handle(window);
+    void* x11_display = ug_window_get_x11_display();
+
+    WGPUSurfaceSourceXlibWindow x11_surface_source = {
+        .chain = {
+            .next = NULL,
+            .sType = WGPUSType_SurfaceSourceXlibWindow,
+        },
+        .display = x11_display,
+        .window = (uint32_t)(uintptr_t)x11_window,
+    };
+
+    WGPUSurfaceDescriptor surface_desc = {
+        .nextInChain = (const WGPUChainedStruct*)&x11_surface_source,
+        .label = {"Main Surface", WGPU_STRLEN},
+    };
+
+    surface = wgpuInstanceCreateSurface(instance, &surface_desc);
 #endif
 
     return surface;
@@ -117,6 +157,14 @@ static UGContext* create_context_internal(UGWindow* window, WGPUPowerPreference 
     context->surface = create_surface(context->instance, window);
     if (!context->surface) {
         fprintf(stderr, "Failed to create surface\n");
+#if defined(__APPLE__)
+        fprintf(stderr, "  Platform: macOS (Metal)\n");
+#elif defined(_WIN32)
+        fprintf(stderr, "  Platform: Windows\n");
+#else
+        fprintf(stderr, "  Platform: Linux (X11)\n");
+        fprintf(stderr, "  Make sure X11 display is available\n");
+#endif
         wgpuInstanceRelease(context->instance);
         free(context);
         return NULL;
@@ -285,4 +333,5 @@ void ug_context_destroy(UGContext* context) {
         free(context);
     }
 }
+
 

@@ -30,6 +30,7 @@ void ug_window_destroy(UGWindow* window);
 bool ug_window_should_close(UGWindow* window);
 void ug_window_poll_events(UGWindow* window);
 void* ug_window_get_native_handle(UGWindow* window);
+void* ug_window_get_x11_display(void); // Get X11 display (Linux only)
 void ug_window_get_size(UGWindow* window, int* width, int* height);
 
 // WebGPU Context management
@@ -355,4 +356,5 @@ void* ug_create_metal_layer(void* ns_window_ptr);
 #endif
 
 #endif // UNGRUND_H
+
 
